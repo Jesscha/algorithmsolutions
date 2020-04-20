@@ -27,9 +27,13 @@ def solution(m, musicinfos):
         if m in melody:
             ansset.append([mName, playTime, idx])
     
-    ansset.sort(key = lambda x: (-x[1], idx))
     
-    return ansset[0][0]
+    
+    if ansset:
+        ansset.sort(key = lambda x: (-x[1], idx))
+        return ansset[0][0]
+    else:
+        return "(None)"
 
 
 print(solution("ABC", ["12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"]))
