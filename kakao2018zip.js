@@ -2,13 +2,11 @@
 
 function solution(msg) {
     const alphas = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    
     const ans = [] 
     const visit = []
     for(let i = 0; i < msg.length; i++){
         visit.push(0)
     }
-    
     let txtlen = 1
     let textbefore
     for(let i = 0; i< msg.length; i++){
@@ -39,7 +37,6 @@ console.log(solution("KAKAO"))
 
 언제까지 글자수를 체크해야 할지 모르겠다. 
 비짓을 만들면 해결 할 수 있다. 해당 글자가 비짓 되었으면 패스를 하자 
-
 
 
 */
