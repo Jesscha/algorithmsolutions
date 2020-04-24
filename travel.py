@@ -1,4 +1,5 @@
 from collections import defaultdict
+import copy
 
 def solution(tickets):
     countryDict = defaultdict(list)
@@ -13,18 +14,14 @@ def solution(tickets):
             answer.append(tmp)
             return
         for c in countryDict[t]:
-            tmpDict = countryDict.copy()
+            tmpDict = copy.deepcopy(countryDict)
             tmpDict[t].remove(c)
             dfs(c, tmp, tmpDict)
-            tmpDict[t].append(c)
-            tmpDict[t].sort()
     
     for c in countryDict["ICN"]:
-            tmpDict = countryDict.copy()
+            tmpDict = copy.deepcopy(countryDict)
             tmpDict["ICN"].remove(c)
             dfs(c, ["ICN"], tmpDict)
-            tmpDict["ICN"].append(c)
-            tmpDict["ICN"].sort()
     return answer[0]
 
     
