@@ -1,28 +1,33 @@
+
 function solution(numbers) {
-    var answer = 0;
-    var set = new Set();
-    makeNumbers(set , '' , numbers.split(''));
+    let set = new Set();
+    makeNumber(set, '', numbers.split(""))
     return set.size;
 }
 
-function issosu(num) {
-    if( num < 2) return false;
-    for (var i =2; i <= num / 2 ; i++) {
-        if( num % i === 0) return false;
+
+
+function isPrime(num){ 
+    if (num < 2) return false;
+    for (let i = 2; i < Math.sqrt(num); i++) {
+        if (num %i === 0){
+            return false
+        }
     }
-    return true;
+    return true
 }
 
-function makeNumbers(set , cur, nums) {
-    if( nums.length === 0 ) return;
-    var clone = nums.slice().reverse();
-    nums.forEach(function(i) {
-        var su = clone.pop();
-        var num = Number(cur+su);
-        if ( issosu(num)) {
-            set.add(num);
+function makeNumber (set, cur, nums){
+    if (nums.length === 0) return;
+    let clone = nums.slice()
+    for (let j in nums){
+        let numForAdd = clone.pop();
+        let numForCheck = Number(cur + numForAdd)
+        if (isPrime(numForCheck)){
+            set.add(numForCheck)
         }
-        makeNumbers(set, cur+su , clone);
-        clone.unshift(su);
-    }) 
+        makeNumber(set, cur+numForAdd, clone);
+        clone.unshift(numForAdd)
+    }
 }
+console.log(solution("011"))
