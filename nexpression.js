@@ -8,11 +8,7 @@ function solution(N, number) {
   while (k < 9) {
     k++;
     const SetToAdd = new Set();
-    let wordToadd = "";
-    for (let w = 0; w < k; w++) {
-      wordToadd += String(N);
-    }
-    SetToAdd.add(Number(wordToadd));
+    SetToAdd.add('1'.repeat(k)*N);
     // console.log(dp[0][0])
     for (let i = 1; i <= k / 2; i++) {
       // dp[i]에 대하여 dp[k-i]의 모든 원소를 사칙연산 하는 알고리즘
