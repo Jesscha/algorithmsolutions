@@ -32,13 +32,7 @@ function solution(n, edge) {
   visit.splice(0,1)
   let maxlen = Math.max(...visit)
   var answer = 0;
-  for (let l of visit){
-      if (l === maxlen){
-          answer++;
-      }
-  }
-
-  return answer;
+  return visit.filter(item=> item === maxlen).length
 }
 
 console.log(
