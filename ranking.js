@@ -12,31 +12,40 @@ function solution(n, results) {
         const wins = new Set()
         arrLose.push(wins)
     }
-    results = results.sort((a,b)=>a[0]-b[0])
-    for (let re of results){
-        let [winner, loser] = re
-        // 승부 자체를 기록
-        console.log({re})
-        arrWin[winner].add(loser);
-        arrLose[loser].add(winner);
-
-        // 다른 승부를 이식
-        for (let a of arrLose[winner]){
-            arrLose[loser].add(a);
-            arrWin[a].add(loser);
+    for (let index = 1; index <n+1; index++){
+        for (let re of results){
+            
+            let [winner, loser] = re
+            // 승부 자체를 기록
+            if (winner === index){
+                arrWin[index].add(loser);
+            }
+            if (loser === index){
+                arrLose[index].add(winner);
+            }
+            // 다른 승부를 이식
+            for (let a of arrLose[index]){
+                for (let aa of arrWin[index] ){
+                    arrWin[a].add(aa)
+                }
+            }
+            for (let b of arrWin[index]){
+                for (let bb of arrLose[index] ){
+                    arrLose[b].add(bb)
+                }
+            }    
         }
-        for (let b of arrWin[loser]){
-            arrWin[winner].add(b);
-            arrLose[b].add(winner)
-        }    
+
+
     }
+   
     let answer = 0;  
     for (let k in arrWin){
         if (arrWin[k].size + arrLose[k].size ===n-1){
             answer++
         }
     }  
-    console.log({arrLose, arrWin})
+
   return answer;
 }
 
@@ -70,3 +79,4 @@ console.log(
 
 // 3try 만에 배운 것, 순서가 중요하다. 마지막에 앞의 전적을 업데이트 하는 일이 발생하면 그것과 관련된 다른 승부를 업데이트 할 수 없었다. 
 
+// 4try 적용점. 순서로 깔짝깔짝 고치지 말고 처음부터 완전히 승부를 기록하면 된다.
