@@ -22,9 +22,11 @@ function solution(n, results) {
         // 다른 승부를 이식
         for (let a of arrLose[winner]){
             arrLose[loser].add(a);
+            arrWin[a].add(loser);
         }
         for (let b of arrWin[loser]){
             arrWin[winner].add(b);
+            arrLose[b].add(winner)
         }    
     }
     let answer = 0;  
@@ -33,11 +35,12 @@ function solution(n, results) {
             answer++
         }
     }  
+    console.log({arrLose, arrWin})
   return answer;
 }
 
 console.log(
-  solution(8, [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8], [4, 5]])
+  solution(8, [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8]], [4, 5])
 );
 
 // 승패의 개수가 n-1개 들어 있는 사람의 순위는 정확하게 파악할 수 있다.
@@ -60,4 +63,5 @@ console.log(
 // 1. 이긴 진 자체를 기록
 // 2. 이긴 사람의 진 리스트를 진 사람의 진 리스트에 추가
 // 3. 진 사람의 이긴 리스트릴 이긴 사람의 이긴 리스트에 추가
-// 4. 이긴 진 리스트 합처서 개수가 n-1개 이면 count
+// 4. 각 선수의 정보가 업데이트 될 때마다 추가로 갱신 
+// 5. 이긴 진 리스트 합처서 개수가 n-1개 이면 count
