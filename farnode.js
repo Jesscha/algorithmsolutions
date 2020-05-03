@@ -18,7 +18,8 @@ function solution(n, edge) {
   visit[1] = cnt;
   while (q.length > 0) {
     cnt++;
-    for (let j in q) {
+    let len = q.length
+    for (let j =0; j <len; j++) {
       let cur = q.shift();
       for (let i in nodeMap[cur]) {
         if (visit[i] === "0" && nodeMap[cur][i] === 1) {
