@@ -12,10 +12,11 @@ function solution(n, results) {
         const wins = new Set()
         arrLose.push(wins)
     }
-
+    results = results.sort((a,b)=>a[0]-b[0])
     for (let re of results){
         let [winner, loser] = re
         // 승부 자체를 기록
+        console.log({re})
         arrWin[winner].add(loser);
         arrLose[loser].add(winner);
 
@@ -40,7 +41,7 @@ function solution(n, results) {
 }
 
 console.log(
-  solution(8, [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8]], [4, 5])
+  solution(8, [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8], [4, 5]])
 );
 
 // 승패의 개수가 n-1개 들어 있는 사람의 순위는 정확하게 파악할 수 있다.
@@ -65,3 +66,7 @@ console.log(
 // 3. 진 사람의 이긴 리스트릴 이긴 사람의 이긴 리스트에 추가
 // 4. 각 선수의 정보가 업데이트 될 때마다 추가로 갱신 
 // 5. 이긴 진 리스트 합처서 개수가 n-1개 이면 count
+
+
+// 3try 만에 배운 것, 순서가 중요하다. 마지막에 앞의 전적을 업데이트 하는 일이 발생하면 그것과 관련된 다른 승부를 업데이트 할 수 없었다. 
+
