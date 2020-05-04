@@ -1,82 +1,47 @@
-function solution(n, results) {
+function solution(n, results){
+    let boxers = new Array(n).fill(0);
+    boxers = boxers.map(a=> [[],[]]);
 
-    // 각 선수의 이기고 진 사람을 기록할 set을 담을 array를 만든다. 
-    let arrWin = [] 
-    for (let i = 0; i < n+1; i++) {
-        const wins = new Set()
-        arrWin.push(wins)
+    for (let i = 0; i < results.length; i++) {
+        let result = results[i]
+        // 각 번호의 1번 자리에는 각 번호 자신이 이긴 선수들을 추가 
+        // 각 번호의 0번 자리에는 각 번호 자신이 진 선수를 추가
+        boxers[result[0]-1][1].push(result[1])
+        boxers[result[1]-1][0].push(result[0])
     }
 
-    let arrLose = [] 
-    for (let j = 0; j < n+1; j++) {
-        const wins = new Set()
-        arrLose.push(wins)
-    }
-    for (let index = 1; index <n+1; index++){
-        for (let re of results){
+    let idx = 0;
+
+    while(idx < n){
+
+        for(let i=0;i<results.length;i++){
+            let result = results[i]
+            let r1 = result[0]
+            let r2 = result[1]
             
-            let [winner, loser] = re
-            // 승부 자체를 기록
-            if (winner === index){
-                arrWin[index].add(loser);
-            }
-            if (loser === index){
-                arrLose[index].add(winner);
-            }
-            // 다른 승부를 이식
-            for (let a of arrLose[index]){
-                for (let aa of arrWin[index] ){
-                    arrWin[a].add(aa)
+            for(let j=0;j<boxers.length;j++){
+
+                let boxer = boxers[j]
+                // 지는 세트 
+                let b1 = boxer[0]
+                // 이기는 세트
+                let b2 = boxer[1]
+                // 이미 결정 되 있으면 무시
+                if(b1.length + b2.length == n-1) continue
+                //특정 선수가 r2에는 지는데  r1한테는 지는게 기록 되어 있지 않으면 그 선수는 반드시 r1에게 져야 한다. 왜냐면 r2는 r1에게 지기 때문이다.
+                if(b1.includes(r2)){
+                    if(!b1.includes(r1)) b1.push(r1)
+                }
+                // 특정 선수가 r1에게는 이기는데 r2한테 이기는게 기록되어 있지 안흥면 그 선수는  반드시 r2에게 이긴다. r1은  r2에게 이기기 때문이다
+                if(b2.includes(r1)){
+                    if(!b2.includes(r2)) b2.push(r2)
                 }
             }
-            for (let b of arrWin[index]){
-                for (let bb of arrLose[index] ){
-                    arrLose[b].add(bb)
-                }
-            }    
         }
-
-
+        idx++
     }
-   
-    let answer = 0;  
-    for (let k in arrWin){
-        if (arrWin[k].size + arrLose[k].size ===n-1){
-            answer++
-        }
-    }  
-
-  return answer;
+    return boxers.filter(a => {return a[0].length + a[1].length == n-1 ? true : false}).length
 }
 
-console.log(
-  solution(8, [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8], [4, 5]])
-);
 
-// 승패의 개수가 n-1개 들어 있는 사람의 순위는 정확하게 파악할 수 있다.
-
-// 이를 위한 구현 방법
-
-// 각 번호 별로 이긴 set과 진 set을 만든다.
-
-// for 문을 돌린다. 각 항의 0번째가 1번째를 이기는 것이므로 이를 각기 기록한다.
-
-// 문제는 직접 승부가 아니라 다른 이들과의 승부로 결정되는 것을 기록하는방법
-
-// 누군가에게 졌다면, 그 사람이 이긴 모든 사람은 나를 이긴다.
-
-// 누군가를 이겼다면 그 사람이 진 모든 사람은 나에게 진다.
-
-// 위의 두가지를 기본 원리로 삼아 알고리즘을 짠다.
-
-// 다시 정리하면,
-// 1. 이긴 진 자체를 기록
-// 2. 이긴 사람의 진 리스트를 진 사람의 진 리스트에 추가
-// 3. 진 사람의 이긴 리스트릴 이긴 사람의 이긴 리스트에 추가
-// 4. 각 선수의 정보가 업데이트 될 때마다 추가로 갱신 
-// 5. 이긴 진 리스트 합처서 개수가 n-1개 이면 count
-
-
-// 3try 만에 배운 것, 순서가 중요하다. 마지막에 앞의 전적을 업데이트 하는 일이 발생하면 그것과 관련된 다른 승부를 업데이트 할 수 없었다. 
-
-// 4try 적용점. 순서로 깔짝깔짝 고치지 말고 처음부터 완전히 승부를 기록하면 된다.
+console.log(solution(5, [[4, 3], [4, 2], [3, 2], [1, 2], [2, 5]]))
