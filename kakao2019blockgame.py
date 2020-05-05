@@ -1,93 +1,139 @@
 #2019 KAKAO BLIND RECRUITMENT 블록 게임
+import copy
+answer = 0 
+newBoard = []
+def makeitRain(newBoard):
+    tmpBoard = copy.deepcopy(newBoard)
+    for j in range(2, len(tmpBoard)-2):
+        n = 0
+        m = j
+        while tmpBoard[n+1][m] == 0:
+            n += 1
+            if n == len(tmpBoard)-1:
+                break
+        tmpBoard[n][m] = "g"
+        tmpBoard[n-1][m] = "g"
+    return tmpBoard
+
+def popCheck(tmpBoard):
+    global answer
+    flag = True 
+    for i in range(2, len(tmpBoard)-2):
+        for j in range(2, len(tmpBoard)-2):
+            if tmpBoard[i][j] != 0 and tmpBoard[i][j] != "g":
+                if isPattern1(i, j, tmpBoard):
+                    answer += 1
+                    flag = False 
+                if isPattern2(i, j, tmpBoard):
+                    answer += 1
+                    flag = False
+                if isPattern3(i, j, tmpBoard):
+                    answer += 1
+                    flag = False
+                if isPattern4(i, j, tmpBoard):
+                    answer += 1
+                    flag = False
+                if isPattern5(i, j, tmpBoard):
+                    answer += 1
+                    flag = False
+    if flag:
+        return False
+    else:
+        return True
+
+def isPattern1(i, j, tmpBoard):
+    global newBoard
+    # ⌞ 눞혀서
+    colorNumber = tmpBoard[i][j]
+    if tmpBoard[i][j+1] == "g" and   tmpBoard[i][j+2] == "g" and tmpBoard[i+1][j] == colorNumber and tmpBoard[i+1][j+1] == colorNumber and tmpBoard[i+1][j+2] == colorNumber:
+        newBoard[i][j] = 0
+        newBoard[i][j+1] = 0
+        newBoard[i][j+2] = 0
+        newBoard[i+1][j] =0
+        newBoard[i+1][j+1] = 0
+        newBoard[i+1][j+2] = 0
+        return True
+        
+    return False
+def isPattern2(i, j, tmpBoard):
+    # ⌏ 눞혀서
+    global newBoard
+    colorNumber = tmpBoard[i][j]
+    if tmpBoard[i][j-1] == "g" and   tmpBoard[i][j-2] == "g" and tmpBoard[i+1][j] == colorNumber and tmpBoard[i+1][j-1] == colorNumber and tmpBoard[i+1][j-2] == colorNumber:
+        newBoard[i][j] = 0
+        newBoard[i][j-1] = 0
+        newBoard[i][j-2] = 0
+        newBoard[i+1][j] =0
+        newBoard[i+1][j-1] = 0
+        newBoard[i+1][j-2] = 0
+        return True
+        
+    return False
+    
+     
+def isPattern3(i, j, tmpBoard):
+    # ⌞ 세워서
+    global newBoard
+    colorNumber = tmpBoard[i][j]
+    if tmpBoard[i][j+1] == "g" and   tmpBoard[i+1][j+1] == "g" and tmpBoard[i+1][j] == colorNumber and tmpBoard[i+2][j] == colorNumber and tmpBoard[i+2][j+1] == colorNumber:
+        newBoard[i][j] = 0
+        newBoard[i][j+1] = 0
+        newBoard[i+1][j+1] = 0
+        newBoard[i+1][j] =0
+        newBoard[i+2][j] = 0
+        newBoard[i+2][j+1] = 0
+        return True
+        
+    return False
+
+     
+def isPattern4(i, j, tmpBoard):
+    #  ⌏ 세워서
+    global newBoard
+    colorNumber = tmpBoard[i][j]
+    if tmpBoard[i][j-1] == "g" and   tmpBoard[i+1][j-1] == "g" and tmpBoard[i+1][j] == colorNumber and tmpBoard[i+2][j] == colorNumber and tmpBoard[i+2][j-1] == colorNumber:
+        newBoard[i][j] = 0
+        newBoard[i][j-1] = 0
+        newBoard[i+1][j-1] = 0
+        newBoard[i+1][j] =0
+        newBoard[i+2][j] = 0
+        newBoard[i+2][j-1] = 0
+        return True
+        
+    return False 
+def isPattern5(i, j, tmpBoard):
+    # ㅗ 모양
+    global newBoard
+    colorNumber = tmpBoard[i][j]
+    if tmpBoard[i][j-1] == "g" and   tmpBoard[i][j+1] == "g" and tmpBoard[i+1][j] == colorNumber and tmpBoard[i+1][j+1] == colorNumber and tmpBoard[i+1][j-1] == colorNumber:
+        newBoard[i][j] = 0
+        newBoard[i][j-1] = 0
+        newBoard[i][j+1] = 0
+        newBoard[i+1][j] =0
+        newBoard[i+1][j+1] = 0
+        newBoard[i+1][j-1] = 0
+        return True
+        
+    return False
+
+
+
 
 def solution(board):
-    N = len(board)
-    cnt = 0
-    # 검은게 2개 들었으며 나머지가 모두 같은 숫자인 사각형이 있는지를 확인 하고 그걸0 으로 바꿔 버리는함수
-    def check(i, j):
-        # print(board)
-        bcnt = 0 
-        samenumber = 0 
-        isFirst = False
-        breakFlag = False
-        number = 0
-        # 세로 상자 확인 
-        if i+2 < N and j+1< N:
-            for ii in range(i, i+3):
-                # print(ii)
-                
-                for jj in range(j, j+2):
-                    if board[ii][jj] == "b":
-                        bcnt += 1
-                    else:
-                        if isFirst:
-                            if board[ii][jj] != number:
-                                breakFlag = True
-                                break
-                            else:
-                                samenumber += 1
-                        else:
-                            number = board[ii][jj]
-                            samenumber += 1
-                            isFirst = True 
-                if breakFlag:
-                    break
-            if bcnt == 2 and samenumber == 4:
-                for ii in range(i, i+3):
-                    for jj in range(j, j+2):
-                        board[ii][jj] = 0
-                return True
-        if i+1<N and j+2 <N:
-            bcnt = 0 
-            samenumber = 0 
-            isFirst = False
-            breakFlag = False
-            number = 0
-            # 가로 상자 확인 
-            for ii in range(i, i+2):
-                for jj in range(j, j+3):
-                    if board[ii][jj] == "b":
-                        bcnt += 1
-                    else:
-                        if isFirst:
-                            if board[ii][jj] != number:
-                                breakFlag = True
-                                break
-                            else:
-                                samenumber += 1
-                        else:
-                            number = board[ii][jj]
-                            samenumber += 1
-                            isFirst = True 
-                if breakFlag:
-                    break
-            if bcnt == 2 and samenumber == 4:
-                for ii in range(i, i+2):
-                    for jj in range(j, j+3):
-                        board[ii][jj] = 0
-                return True
-        
-        return False
-    # 한줄씩 덮어보기 
-    executionNumber = 0
-    while executionNumber <= 200:
-        executionNumber += 1
-        for j in range(len(board[0])):
-            ii = 0
-            # 0이 아닌걸 만날 때까지 내려가서 그 위에 블록을 놓음 
-            while ii < N and (board[ii][j] == 0 or board[ii][j] == "b"):
-                ii += 1 
-            board[ii-1][j] = "b"
-        
-        #없앨 수 있는 블록이 있는지 확인 
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if board[i][j] != 0:
-                    if check(i, j):
-                        cnt += 1
-    answer = cnt
-    # print(board)
+    global newBoard
+    newBoard = [[0 for _ in range(len(board)+4)] for _ in range(len(board)+4)]
+    # 0처리를 안하기 위해 padding을 넣어줌
+    originboard = copy.deepcopy(board)
+    for i in range(len(originboard)):
+        for j in range(len(originboard)):
+            newBoard[i+2][j+2] = originboard[i][j]
+    
+    while True:
+        tmpBoard  = makeitRain(newBoard)
+        if popCheck(tmpBoard) == False:
+            break
+
     return answer
 
 
-print(solution(	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 4, 0, 0, 0], [0, 0, 0, 0, 0, 4, 4, 0, 0, 0], [0, 0, 0, 0, 3, 0, 4, 0, 0, 0], [0, 0, 0, 2, 3, 0, 0, 0, 5, 5], [1, 2, 2, 2, 3, 3, 0, 0, 0, 5], [1, 1, 1, 0, 0, 0, 0, 0, 0, 5]]))
+print(solution([[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,4,0,0,0],[0,0,0,0,0,4,4,0,0,0],[0,0,0,0,3,0,4,0,0,0],[0,0,0,2,3,0,0,0,5,5],[1,2,2,2,3,3,0,0,0,5],[1,1,1,0,0,0,0,0,0,5]]))
