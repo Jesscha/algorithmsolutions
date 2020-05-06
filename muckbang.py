@@ -1,30 +1,30 @@
 def solution(food_times, k):
-    sumfood = sum(food_times)
-    if k >= sumfood:
+
+    food_times_list = []
+    totalTime = 0
+    for i in range(0, len(food_times)):
+        food_times_list.append([i, food_times[i]])
+        totalTime+=food_times[i]
+
+    if totalTime <= k:
         return -1
-    lastFood = 0
-    i = 0
-    while k >= 0:
-        i %= len(food_times)
-        if food_times[i] != 0:
-            food_times[i] -= 1
-            lastFood = i+1
-            k -= 1
-        i += 1
 
-
-    return lastFood
-print(solution(	[0, 0, 2, 4, 5, 6], 1))
-
-'''
-1. 0이 발견되는 경우 다음 숫자까지 바로 건너 뛸 수 있도록 dict를 마련한다. 
-2. 처음부터 순회를 돌면서 k를 깎아 나간다. 
-    0이 발견되면 1에서 준비한 dict를 통해서바로 다음 숫자를 찾아 간다. 
-3. k가 0 이 되었을 때 먹고 있는 음식의 번호를 출력한다. 
-
-
-이전에 이러한 페턴을 경험 해 본 적이 있다.
-
-
-
-'''
+    food_times_list = sorted(food_times_list, key=lambda x:x[1])
+    # 첫번째 꺼에 길이를 곱한 것 즉, 가장 양이 적은 놈을 먹어 치울 때까지 걸리는 시간 
+    delTime = food_times_list[0][1]*len(food_times_list)
+    i=1
+    # print k
+    # print delTime
+    # 가장 적은 양을 다 먹어 치울 때까지 걸리는 시간이 k보다 작으면
+    while delTime < k:
+        k-=delTime # k에서 delTime을 뺀다. 
+        delTime = (food_times_list[i][1]-food_times_list[i-1][1])*(len(food_times_list)-i) # deltime을 그다음 짭은 놈 만큼 뺀다
+        # print k, delTime
+        i+=1 # i를 1개 더한다. 
+    # 남은 음식들 배치, 원래 번호순으로
+    food_times_list = sorted(food_times_list[i-1:], key=lambda x:x[0])
+    # print food_times_list
+    # print k
+    return food_times_list[k%len(food_times_list)][0]+1 # 
+    # k가 남았으니까 남은만큼은 한줄씩 먹어줘야 함 그리고 남은 음식이 먹어야 할  음식 
+    
